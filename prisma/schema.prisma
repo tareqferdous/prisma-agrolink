@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  role          Role    @default(BUYER)
+  phone         String?
+  location      String?
+  companyName   String?
+  isVerified    Boolean @default(false)
+  isBanned      Boolean @default(false)
+  walletBalance Float   @default(0)
+
+  sessions           Session[]
+  accounts           Account[]
+  listings           Listing[]
+  bidsPlaced         Bid[]               @relation("BuyerBids")
+  ordersAsFarmer     Order[]             @relation("FarmerOrders")
+  ordersAsBuyer      Order[]             @relation("BuyerOrders")
+  walletTransactions WalletTransaction[]
+  reviewsGiven       Review[]            @relation("ReviewsGiven")
+  reviewsReceived    Review[]            @relation("ReviewsReceived")
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verifications")
+}
+
+
+model Listing {
+  id              String           @id @default(cuid())
+  farmerId        String
+  cropName        String
+  quantity        Float
+  unit            Unit
+  minPricePerUnit Float?
+  description     String?
+  harvestDate     DateTime
+  location        String
+  deliveryOptions DeliveryOption[]
+  images          String[]
+  status          ListingStatus    @default(PENDING_APPROVAL)
+  adminNote       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+
+  farmer User    @relation(fields: [farmerId], references: [id])
+  bids   Bid[]
+  orders Order[]
+
+  @@map("listings")
+}
+
+model Bid {
+  id        String    @id @default(cuid())
+  listingId String
+  buyerId   String
+  bidAmount Float
+  buyerNote String?
+  bidStatus BidStatus @default(PENDING)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  listing Listing @relation(fields: [listingId], references: [id])
+  buyer   User    @relation("BuyerBids", fields: [buyerId], references: [id])
+  order   Order?
+
+  @@unique([listingId, buyerId])
+  @@map("bids")
+}
+
+model Order {
+  id             String         @id @default(cuid())
+  listingId      String
+  bidId          String         @unique
+  farmerId       String
+  buyerId        String
+
+  cropPrice      Float
+  shippingCost   Float          @default(0)
+  platformFee    Float
+  farmerAmount   Float
+  totalAmount    Float
+
+  deliveryMethod DeliveryOption
+  courierName    String?
+  trackingNumber String?
+
+  paymentIntentId String?
+  paymentStatus   PaymentStatus @default(UNPAID)
+  orderStatus     OrderStatus   @default(PENDING_PAYMENT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  listing            Listing             @relation(fields: [listingId], references: [id])
+  bid                Bid                 @relation(fields: [bidId], references: [id])
+  farmer             User                @relation("FarmerOrders", fields: [farmerId], references: [id])
+  buyer              User                @relation("BuyerOrders", fields: [buyerId], references: [id])
+  walletTransactions WalletTransaction[]
+  reviews            Review[]
+
+  @@map("orders")
+}
+
+model WalletTransaction {
+  id        String          @id @default(cuid())
+  farmerId  String
+  orderId   String
+  amount    Float
+  type      TransactionType
+  createdAt DateTime        @default(now())
+
+  farmer User  @relation(fields: [farmerId], references: [id])
+  order  Order @relation(fields: [orderId], references: [id])
+
+  @@map("wallet_transactions")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  orderId    String
+  reviewerId String
+  revieweeId String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  order    Order @relation(fields: [orderId], references: [id])
+  reviewer User  @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  reviewee User  @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+
+  @@unique([orderId, reviewerId])
+  @@map("reviews")
+}
+
+
+// ─────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────
+
+enum Role {
+  FARMER
+  BUYER
+  ADMIN
+}
+
+enum Unit {
+  KG
+  MON
+  TON
+}
+
+enum DeliveryOption {
+  PICKUP
+  COURIER
+}
+
+enum ListingStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  CLOSED
+  REJECTED
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  READY_FOR_PICKUP
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  RELEASED
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
