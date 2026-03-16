@@ -11,6 +11,7 @@ import { bidsRoutes } from "./app/modules/bids/bids.route";
 import { listingRoutes } from "./app/modules/listing/listings.route";
 import { ordersRoutes } from "./app/modules/orders/orders.route";
 import { userRoutes } from "./app/modules/users/users.route";
+import { walletRoutes } from "./app/modules/wallet/waller.router";
 
 const app: Application = express();
 
@@ -45,6 +46,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/listings", listingRoutes);
 app.use("/api", bidsRoutes);
 app.use("/api/orders", ordersRoutes);
+app.use("/api/wallet", walletRoutes);
 
 // Basic route
 app.get("/", async (req: Request, res: Response) => {
