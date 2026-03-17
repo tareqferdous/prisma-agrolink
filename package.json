@@ -10,6 +10,7 @@
     "lint": "eslint ./src/**/*",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
+    "db:seed": "tsx src/app/utils/seed.ts",
     "studio": "prisma studio",
     "push": "prisma db push",
     "pull": "prisma db pull",
