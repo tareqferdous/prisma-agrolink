@@ -6,10 +6,15 @@ import { envVars } from "./app/config/env";
 import { auth } from "./app/lib/auth";
 import { globalErrorHandler } from "./app/middlewares/globalErrorhandler";
 import { notFound } from "./app/middlewares/notFound";
+import { adminRoutes } from "./app/modules/admin/admin.route";
 import { authRoutes } from "./app/modules/auth/auth.router";
 import { bidsRoutes } from "./app/modules/bids/bids.route";
 import { listingRoutes } from "./app/modules/listing/listings.route";
 import { ordersRoutes } from "./app/modules/orders/orders.route";
+import {
+  orderReviewRouter,
+  userReviewRouter,
+} from "./app/modules/reviews/reviews.router";
 import { userRoutes } from "./app/modules/users/users.route";
 import { walletRoutes } from "./app/modules/wallet/waller.router";
 
@@ -47,6 +52,9 @@ app.use("/api/listings", listingRoutes);
 app.use("/api", bidsRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/wallet", walletRoutes);
+app.use("/api/orders/:id/review", orderReviewRouter);
+app.use("/api/users/:id/reviews", userReviewRouter);
+app.use("/api/admin", adminRoutes);
 
 // Basic route
 app.get("/", async (req: Request, res: Response) => {
