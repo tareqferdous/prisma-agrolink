@@ -130,6 +130,7 @@ const createPaymentIntent = async (orderId: string, buyerId: string) => {
     clientSecret: paymentIntent.client_secret,
     paymentIntentId: paymentIntent.id,
     totalAmount: order.totalAmount,
+    cropName: order.listing.cropName,
   };
 };
 

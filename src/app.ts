@@ -20,13 +20,6 @@ import { walletRoutes } from "./app/modules/wallet/waller.router";
 
 const app: Application = express();
 
-// Better Auth routes
-app.all("/api/auth/sign-in/*splat", toNodeHandler(auth));
-app.all("/api/auth/sign-up/*splat", toNodeHandler(auth));
-app.all("/api/auth/sign-out/*splat", toNodeHandler(auth));
-app.all("/api/auth/session/*splat", toNodeHandler(auth));
-app.all("/api/auth/callback/*splat", toNodeHandler(auth));
-
 app.use(
   cors({
     origin: [
@@ -44,6 +37,14 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Better Auth routes
+app.all("/api/auth/sign-in/*splat", toNodeHandler(auth));
+app.all("/api/auth/sign-up/*splat", toNodeHandler(auth));
+app.all("/api/auth/sign-out/*splat", toNodeHandler(auth));
+app.all("/api/auth/get-session", toNodeHandler(auth));
+app.all("/api/auth/session/*splat", toNodeHandler(auth));
+app.all("/api/auth/callback/*splat", toNodeHandler(auth));
 
 // application routes
 app.use("/api/auth", authRoutes);
