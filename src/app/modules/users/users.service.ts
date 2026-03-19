@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
 import { TUpdateProfile } from "./users.validation";
 
@@ -33,7 +35,27 @@ const updateUserProfile = async (id: string, data: TUpdateProfile) => {
   return user;
 };
 
+const getUserProfileById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      role: true,
+      location: true,
+      createdAt: true,
+    },
+  });
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  return user;
+};
+
 export const usersService = {
   getUserById,
   updateUserProfile,
+  getUserProfileById,
 };
