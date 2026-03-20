@@ -97,6 +97,7 @@ model Listing {
   deliveryOptions DeliveryOption[]
   images          String[]
   status          ListingStatus    @default(PENDING_APPROVAL)
+  category  Category  @default(OTHERS)
   adminNote       String?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
@@ -246,4 +247,15 @@ enum PaymentStatus {
 enum TransactionType {
   CREDIT
   DEBIT
+}
+
+enum Category {
+  VEGETABLES
+  FRUITS
+  GRAINS
+  RICE
+  PULSES
+  SPICES
+  DAIRY
+  OTHERS
 }

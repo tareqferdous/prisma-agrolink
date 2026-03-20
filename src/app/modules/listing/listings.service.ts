@@ -36,6 +36,7 @@ const listingSelectFields = {
 const getAllListings = async (filters: TListingFilter) => {
   const {
     cropName,
+    category,
     location,
     minPrice,
     maxPrice,
@@ -55,6 +56,7 @@ const getAllListings = async (filters: TListingFilter) => {
     ...(cropName && {
       cropName: { contains: cropName, mode: "insensitive" },
     }),
+    ...(category && { category }),
     ...(location && {
       location: { contains: location, mode: "insensitive" },
     }),
