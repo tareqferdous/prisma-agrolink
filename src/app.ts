@@ -39,10 +39,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Better Auth routes
+app.all("/api/auth/sign-in", toNodeHandler(auth));
 app.all("/api/auth/sign-in/*splat", toNodeHandler(auth));
+app.all("/api/auth/sign-up", toNodeHandler(auth));
 app.all("/api/auth/sign-up/*splat", toNodeHandler(auth));
+app.all("/api/auth/sign-out", toNodeHandler(auth));
 app.all("/api/auth/sign-out/*splat", toNodeHandler(auth));
 app.all("/api/auth/get-session", toNodeHandler(auth));
+app.all("/api/auth/session", toNodeHandler(auth));
 app.all("/api/auth/session/*splat", toNodeHandler(auth));
 app.all("/api/auth/callback/*splat", toNodeHandler(auth));
 

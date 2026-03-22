@@ -79,8 +79,20 @@ const getAllListings = catchAsync(async (req: Request, res: Response) => {
     message: "Listings fetched successfully",
     data: result.listings,
     meta: result.meta,
+    filterMeta: result.filterMeta,
   });
 });
+
+// const getMeta = catchAsync(async (req: Request, res: Response) => {
+//   const meta = await listingService.getListingsMeta();
+
+//   sendResponse(res, {
+//     httpStatusCode: httpStatus.OK,
+//     success: true,
+//     message: "Listings meta fetched successfully",
+//     data: meta,
+//   });
+// });
 
 export const listingController = {
   createListing,
@@ -89,4 +101,5 @@ export const listingController = {
   deleteListing,
   getListingById,
   getAllListings,
+  // getMeta,
 };

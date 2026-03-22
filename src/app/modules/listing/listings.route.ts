@@ -7,6 +7,7 @@ import { listingController } from "./listings.controller";
 
 const router = Router();
 
+// router.get("/meta", listingController.getMeta);
 // Farmer only
 router.get("/my", requireAuth("FARMER"), listingController.getMyListings);
 router.post(
@@ -15,7 +16,12 @@ router.post(
   requireVerified,
   listingController.createListing,
 );
-router.patch("/:id", requireAuth("FARMER"), listingController.updateListing);
+router.patch(
+  "/:id",
+  requireAuth("FARMER"),
+  requireVerified,
+  listingController.updateListing,
+);
 router.delete("/:id", requireAuth("FARMER"), listingController.deleteListing);
 
 // Public routes

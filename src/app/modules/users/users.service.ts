@@ -29,7 +29,19 @@ const updateUserProfile = async (id: string, data: TUpdateProfile) => {
   const user = await prisma.user.update({
     where: { id },
     data,
-    select: userSelectFields,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      phone: true,
+      location: true,
+      companyName: true,
+      isVerified: true,
+      walletBalance: true,
+      image: true,
+      createdAt: true,
+    },
   });
 
   return user;

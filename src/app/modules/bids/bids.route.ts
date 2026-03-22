@@ -1,11 +1,19 @@
 import { Router } from "express";
-import { requireAuth } from "../../middlewares/auth.middleware";
+import {
+  requireAuth,
+  requireVerified,
+} from "../../middlewares/auth.middleware";
 import { bidController } from "./bids.controller";
 
 const router = Router();
 
 // Buyer — place bid on a listing
-router.post("/listings/:id/bids", requireAuth("BUYER"), bidController.placeBid);
+router.post(
+  "/listings/:id/bids",
+  requireAuth("BUYER"),
+  requireVerified,
+  bidController.placeBid,
+);
 
 // Farmer — view bids on own listing
 router.get(

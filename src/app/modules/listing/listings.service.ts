@@ -74,16 +74,52 @@ const getAllListings = async (filters: TListingFilter) => {
     }),
   };
 
-  const [listings, total] = await prisma.$transaction([
-    prisma.listing.findMany({
-      where,
-      select: listingSelectFields,
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limitNum,
-    }),
-    prisma.listing.count({ where }),
-  ]);
+  // Active listings এর base where — filter ছাড়া
+  const activeWhere = {
+    status: ListingStatus.ACTIVE,
+    isDeleted: false,
+  };
+
+  const [listings, total, locations, priceStats, activeCategories] =
+    await Promise.all([
+      // Filtered listings
+      prisma.listing.findMany({
+        where,
+        select: listingSelectFields,
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limitNum,
+      }),
+
+      // Filtered count
+      prisma.listing.count({ where }),
+
+      // Meta — unique locations (unfiltered)
+      prisma.listing.findMany({
+        where: activeWhere,
+        select: { location: true },
+        distinct: ["location"],
+        orderBy: { location: "asc" },
+      }),
+
+      // Meta — price range (unfiltered)
+      prisma.listing.aggregate({
+        where: {
+          ...activeWhere,
+          minPricePerUnit: { not: null },
+        },
+        _min: { minPricePerUnit: true },
+        _max: { minPricePerUnit: true },
+      }),
+
+      // Meta — active categories (unfiltered)
+      prisma.listing.findMany({
+        where: activeWhere,
+        select: { category: true },
+        distinct: ["category"],
+        orderBy: { category: "asc" },
+      }),
+    ]);
 
   return {
     listings,
@@ -93,8 +129,53 @@ const getAllListings = async (filters: TListingFilter) => {
       total,
       totalPages: Math.ceil(total / limitNum),
     },
+    filterMeta: {
+      locations: locations.map((l) => l.location),
+      priceRange: {
+        min: priceStats._min.minPricePerUnit ?? 0,
+        max: priceStats._max.minPricePerUnit ?? 10000,
+      },
+      categories: activeCategories.map((c) => c.category),
+    },
   };
 };
+
+// const getListingsMeta = async () => {
+//   const [locations, priceStats, activeCategories] = await Promise.all([
+//     prisma.listing.findMany({
+//       where: { status: ListingStatus.ACTIVE, isDeleted: false },
+//       select: { location: true },
+//       distinct: ["location"],
+//       orderBy: { location: "asc" },
+//     }),
+
+//     prisma.listing.aggregate({
+//       where: {
+//         status: ListingStatus.ACTIVE,
+//         isDeleted: false,
+//         minPricePerUnit: { not: null },
+//       },
+//       _min: { minPricePerUnit: true },
+//       _max: { minPricePerUnit: true },
+//     }),
+
+//     prisma.listing.findMany({
+//       where: { status: ListingStatus.ACTIVE, isDeleted: false },
+//       select: { category: true },
+//       distinct: ["category"],
+//       orderBy: { category: "asc" },
+//     }),
+//   ]);
+
+//   return {
+//     locations: locations.map((l) => l.location),
+//     priceRange: {
+//       min: priceStats._min.minPricePerUnit ?? 0,
+//       max: priceStats._max.minPricePerUnit ?? 10000,
+//     },
+//     categories: activeCategories.map((c) => c.category),
+//   };
+// };
 
 const getMyListings = async (farmerId: string) => {
   const listings = await prisma.listing.findMany({
@@ -245,4 +326,5 @@ export const listingService = {
   deleteListing,
   getListingById,
   getAllListings,
+  // getListingsMeta,
 };
