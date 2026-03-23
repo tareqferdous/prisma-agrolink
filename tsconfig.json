@@ -1,34 +1,35 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    // Environment Settings
+    "module": "ESNext",
     "moduleResolution": "bundler",
-    "target": "es2023",
-    "rootDir": "./",
+    "target": "ES2023",
+    // File Layout
+    "rootDir": "./src",
     "outDir": "./dist",
+
+    // For nodejs:
+    "lib": ["esnext"],
+    "types": ["node"],
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Recommended Options
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "5.0"
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "src/generated/prisma"]
 }
-
-// {
-//   "compilerOptions": {
-//     "target": "ES2020",
-//     "module": "commonjs",
-//     "moduleResolution": "node",
-//     "rootDir": "./src",
-//     "outDir": "./dist",
-//     "strict": true,
-//     "esModuleInterop": true,
-//     "skipLibCheck": true,
-//     "forceConsistentCasingInFileNames": true,
-//     "resolveJsonModule": true
-//   },
-//   "include": ["src/**/*"],
-//   "exclude": ["node_modules", "dist", "src/generated"]
-// }
 
