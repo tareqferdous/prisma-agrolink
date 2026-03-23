@@ -36,9 +36,14 @@ const updateUser = async (userId: string, data: TUpdateUser) => {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
+  // Filter out undefined values for exactOptionalPropertyTypes compatibility
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(([, value]) => value !== undefined),
+  ) as any;
+
   const updated = await prisma.user.update({
     where: { id: userId },
-    data,
+    data: cleanData,
     select: {
       id: true,
       name: true,

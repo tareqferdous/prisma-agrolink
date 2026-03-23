@@ -46,14 +46,14 @@ export const placeBid = async (
     },
     update: {
       bidAmount: data.bidAmount,
-      buyerNote: data.buyerNote,
+      buyerNote: data.buyerNote ?? null,
       bidStatus: BidStatus.PENDING,
     },
     create: {
       listingId,
       buyerId,
       bidAmount: data.bidAmount,
-      buyerNote: data.buyerNote,
+      buyerNote: data.buyerNote ?? null,
     },
     select: {
       id: true,
@@ -226,7 +226,7 @@ const acceptBid = async (bidId: string, farmerId: string) => {
         platformFee,
         farmerAmount,
         totalAmount,
-        deliveryMethod: bid.listing.deliveryOptions[0],
+        deliveryMethod: bid.listing.deliveryOptions[0] || "PICKUP",
       },
       select: {
         id: true,

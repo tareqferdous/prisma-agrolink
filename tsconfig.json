@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
     // Environment Settings
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "target": "ES2023",
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
-
     // For nodejs:
-    "lib": ["esnext"],
-    "types": ["node"],
-
+    "lib": [
+      "esnext"
+    ],
+    "types": [
+      "node"
+    ],
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-
     // Recommended Options
     "strict": true,
     "esModuleInterop": true,
@@ -29,7 +29,12 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/generated/prisma"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/generated/prisma"
+  ]
 }
-

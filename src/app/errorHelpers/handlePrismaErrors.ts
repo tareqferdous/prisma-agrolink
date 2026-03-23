@@ -185,7 +185,7 @@ export const handlePrismaClientValidationError = (
   // extract field name for field-specific validation errors
   // Example message: "Argument `data.email`: Got invalid value `invalid-email` on prisma.user.create()"
   const fieldMatch = cleanMessage.match(/Argument `(\w+)`/i);
-  const fieldName = fieldMatch ? fieldMatch[1] : "Unknown Field";
+  const fieldName = fieldMatch?.[1] ?? "Unknown Field";
 
   //main message
 
@@ -217,9 +217,10 @@ export const handlerPrismaClientInitializationError = (
     ? getStatusCodeFromPrismaError(error.errorCode)
     : status.SERVICE_UNAVAILABLE;
 
-  const cleanMessage = error.message;
-
-  cleanMessage.replace(/Invalid `.*?` invocation:?\s*/i, "");
+  const cleanMessage = error.message.replace(
+    /Invalid `.*?` invocation:?\s*/i,
+    "",
+  );
 
   const lines = cleanMessage.split("\n").filter((line) => line.trim());
 

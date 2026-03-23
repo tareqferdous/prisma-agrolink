@@ -93,9 +93,14 @@ export const globalErrorHandler = async (
     success: false,
     message: message,
     errorSources,
-    error: envVars.NODE_ENV === "development" ? err : undefined,
-    stack: envVars.NODE_ENV === "development" ? stack : undefined,
   };
+
+  if (envVars.NODE_ENV === "development") {
+    errorResponse.error = err;
+    if (stack) {
+      errorResponse.stack = stack;
+    }
+  }
 
   res.status(statusCode).json(errorResponse);
 };

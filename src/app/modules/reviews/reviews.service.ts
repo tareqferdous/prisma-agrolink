@@ -60,7 +60,7 @@ const createReview = async (
       reviewerId,
       revieweeId,
       rating: data.rating,
-      comment: data.comment,
+      ...(data.comment !== undefined && { comment: data.comment }),
     },
     select: {
       id: true,

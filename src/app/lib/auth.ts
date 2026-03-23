@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { envVars } from "../config/env";
+import { envVars } from "./../config/env";
 import { prisma } from "./prisma";
 
 export const auth = betterAuth({
@@ -8,8 +8,30 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  baseURL: envVars.BETTER_AUTH_URL!,
-  secret: envVars.BETTER_AUTH_SECRET!,
+  baseURL: envVars.FRONTEND_URL,
+  trustedOrigins: [envVars.FRONTEND_URL ?? "http://localhost:3000"],
+
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    },
+  },
+
+  advanced: {
+    cookiePrefix: "better-auth",
+    useSecureCookies: true,
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+    cookieOptions: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+      path: "/",
+    },
+    disableCSRFCheck: false,
+  },
 
   emailAndPassword: {
     enabled: true,
@@ -64,8 +86,6 @@ export const auth = betterAuth({
       },
     },
   },
-
-  trustedOrigins: [envVars.FRONTEND_URL ?? "http://localhost:3000"],
 });
 
 export type Auth = typeof auth;

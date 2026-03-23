@@ -207,9 +207,13 @@ const getListingById = async (id: string) => {
 };
 
 const createListing = async (farmerId: string, data: TCreateListing) => {
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(([_, v]) => v !== undefined)
+  ) as any;
+
   const listing = await prisma.listing.create({
     data: {
-      ...data,
+      ...cleanData,
       farmerId,
       harvestDate: new Date(data.harvestDate),
       status: ListingStatus.PENDING_APPROVAL,
@@ -261,10 +265,14 @@ const updateListing = async (
     );
   }
 
+  const cleanData = Object.fromEntries(
+    Object.entries(data).filter(([_, v]) => v !== undefined)
+  ) as any;
+
   const updated = await prisma.listing.update({
     where: { id },
     data: {
-      ...data,
+      ...cleanData,
       ...(data.harvestDate && { harvestDate: new Date(data.harvestDate) }),
     },
     select: listingSelectFields,
