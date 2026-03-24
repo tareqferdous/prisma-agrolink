@@ -26,17 +26,49 @@ export const sendBidAcceptedEmail = async (
     to: buyerEmail,
     subject: `AgroLink — আপনার bid accepted! ${cropName}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #16a34a;">অভিনন্দন! আপনার bid accepted হয়েছে।</h2>
-        <p>পণ্য: <strong>${cropName}</strong></p>
-        <p>মোট পরিমাণ: <strong>৳${totalAmount}</strong></p>
-        <p style="color: #dc2626; font-weight: bold;">
-          ⚠️ ২৪ ঘণ্টার মধ্যে payment করুন, নাহলে order বাতিল হবে।
-        </p>
-        <a href="${envVars.FRONTEND_URL}/orders/${orderId}/pay"
-          style="background:#16a34a;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:16px">
-          এখনই Pay করুন
-        </a>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #16a34a; font-size: 28px; margin: 0;">🎉 অভিনন্দন!</h1>
+          <p style="color: #666; margin: 8px 0 0 0;">আপনার bid accepted হয়েছে</p>
+        </div>
+
+        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 15px 0; color: #374151;">অর্ডার বিবরণ:</h3>
+          <div style="margin-bottom: 12px;">
+            <p style="margin: 0 0 4px 0; color: #666; font-size: 12px;">পণ্য</p>
+            <p style="margin: 0; font-weight: bold; color: #111; font-size: 16px;">${cropName}</p>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <p style="margin: 0 0 4px 0; color: #666; font-size: 12px;">মোট পরিমাণ</p>
+            <p style="margin: 0; font-weight: bold; color: #16a34a; font-size: 20px;">৳${totalAmount}</p>
+          </div>
+          <div style="border-top: 1px solid #e5e7eb; padding-top: 12px;">
+            <p style="margin: 0; color: #dc2626; font-weight: bold;">⚠️ গুরুত্বপূর্ণ: ২৪ ঘণ্টার মধ্যে payment করুন</p>
+            <p style="margin: 8px 0 0 0; color: #666; font-size: 13px;">payment না করলে order বাতিল হবে।</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <a href="${envVars.FRONTEND_URL}/orders/${orderId}/pay"
+            style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: bold; font-size: 16px;">
+            এখনই Payment করুন
+          </a>
+        </div>
+
+        <div style="background: #ecfdf5; border: 1px solid #d1fae5; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+          <h4 style="margin: 0 0 10px 0; color: #047857;">💳 Payment Methods:</h4>
+          <ul style="margin: 0; padding-left: 20px; color: #065f46;">
+            <li style="margin-bottom: 6px;">Credit/Debit Card</li>
+            <li style="margin-bottom: 6px;">Mobile Banking (bKash, Nagad, Rocket)</li>
+            <li style="margin-bottom: 6px;">Online Banking</li>
+          </ul>
+          <p style="margin: 10px 0 0 0; font-size: 12px; color: #047857;">🔒 সম্পূর্ণ নিরাপদ - Stripe এর মাধ্যমে</p>
+        </div>
+
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 15px; text-align: center;">
+          <p style="margin: 0; color: #666; font-size: 12px;">Order ID: <strong>${orderId}</strong></p>
+          <p style="margin: 8px 0 0 0; color: #999; font-size: 12px;">এই email-এ যেকোনো প্রশ্ন থাকলে আমাদের support team-এ যোগাযোগ করুন।</p>
+        </div>
       </div>
     `,
   });

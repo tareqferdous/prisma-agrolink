@@ -8,8 +8,12 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  baseURL: envVars.FRONTEND_URL,
-  trustedOrigins: [envVars.FRONTEND_URL ?? "http://localhost:3000"],
+  baseURL: envVars.BETTER_AUTH_URL,
+  trustedOrigins: [
+    envVars.FRONTEND_URL,
+    envVars.BETTER_AUTH_URL,
+    "http://localhost:3000",
+  ].filter(Boolean),
 
   session: {
     cookieCache: {
@@ -20,7 +24,7 @@ export const auth = betterAuth({
 
   advanced: {
     cookiePrefix: "better-auth",
-    useSecureCookies: true,
+    useSecureCookies: envVars.NODE_ENV === "production",
     crossSubDomainCookies: {
       enabled: false,
     },

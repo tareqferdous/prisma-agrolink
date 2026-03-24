@@ -186,13 +186,37 @@ const acceptBid = async (bidId: string, farmerId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Bid already accepted");
   }
 
+  // Check if order already exists (race condition from concurrent accept requests)
+  const existingOrder = await prisma.order.findUnique({
+    where: { bidId: bidId },
+  });
+
+  if (existingOrder) {
+    // Order already created by concurrent request, return existing order
+    return {
+      bid: { ...bid, bidStatus: BidStatus.ACCEPTED },
+      order: {
+        id: existingOrder.id,
+        cropPrice: existingOrder.cropPrice,
+        platformFee: existingOrder.platformFee,
+        farmerAmount: existingOrder.farmerAmount,
+        totalAmount: existingOrder.totalAmount,
+        deliveryMethod: existingOrder.deliveryMethod,
+        orderStatus: existingOrder.orderStatus,
+        paymentStatus: existingOrder.paymentStatus,
+      },
+      buyer: bid.buyer,
+      cropName: bid.listing.cropName,
+    };
+  }
+
   // Payment calculation
   const cropPrice = bid.bidAmount * bid.listing.quantity;
   const platformFee = Math.round(cropPrice * 0.03);
   const farmerAmount = cropPrice - platformFee;
   const totalAmount = cropPrice + platformFee;
 
-  // Update bid status and listing status in a transaction - 5 operations
+  // Update bid status and listing status in a transaction
   const result = await prisma.$transaction(async (tx) => {
     // Selected bid → ACCEPTED
     const acceptedBid = await tx.bid.update({
