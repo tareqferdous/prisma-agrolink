@@ -9,6 +9,7 @@ import { notFound } from "./app/middlewares/notFound";
 import { adminRoutes } from "./app/modules/admin/admin.route";
 import { authRoutes } from "./app/modules/auth/auth.router";
 import { bidsRoutes } from "./app/modules/bids/bids.route";
+import { farmerRoutes } from "./app/modules/farmer/farmer.route";
 import { listingRoutes } from "./app/modules/listing/listings.route";
 import { ordersRoutes } from "./app/modules/orders/orders.route";
 import {
@@ -65,6 +66,7 @@ app.all("/api/auth/callback/*splat", toNodeHandler(auth));
 // application routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/farmer", farmerRoutes);
 app.use("/api/listings", listingRoutes);
 app.use("/api", bidsRoutes);
 app.use("/api/orders", ordersRoutes);

@@ -11,6 +11,7 @@ import {
 const listingSelectFields = {
   id: true,
   cropName: true,
+  category: true,
   quantity: true,
   unit: true,
   minPricePerUnit: true,

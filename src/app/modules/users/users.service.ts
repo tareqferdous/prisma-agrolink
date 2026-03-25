@@ -27,7 +27,7 @@ const getUserById = async (id: string) => {
 
 const updateUserProfile = async (id: string, data: TUpdateProfile) => {
   const cleanData = Object.fromEntries(
-    Object.entries(data).filter(([_, v]) => v !== undefined)
+    Object.entries(data).filter(([_, v]) => v !== undefined),
   ) as any;
 
   const user = await prisma.user.update({
