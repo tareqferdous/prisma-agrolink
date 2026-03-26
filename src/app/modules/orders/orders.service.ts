@@ -60,11 +60,20 @@ const getMyOrders = async (userId: string, role: string) => {
 
   const orders = await prisma.order.findMany({
     where,
-    select: orderSelectFields,
+    select: {
+      ...orderSelectFields,
+      reviews: {
+        where: { reviewerId: userId },
+        select: { id: true },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 
-  return orders;
+  return orders.map(({ reviews, ...order }) => ({
+    ...order,
+    hasReviewedByMe: reviews.length > 0,
+  }));
 };
 
 const getOrderById = async (orderId: string, userId: string) => {

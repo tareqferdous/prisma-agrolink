@@ -1,5 +1,28 @@
 import { z } from "zod";
 
+const isNotFutureDate = (value: string) => {
+  const parsedDate = new Date(value);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return false;
+  }
+
+  const inputUtcDay = Date.UTC(
+    parsedDate.getUTCFullYear(),
+    parsedDate.getUTCMonth(),
+    parsedDate.getUTCDate(),
+  );
+
+  const now = new Date();
+  const todayUtcDay = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+  );
+
+  return inputUtcDay <= todayUtcDay;
+};
+
 export const categoryEnum = z.enum([
   "VEGETABLES",
   "FRUITS",
@@ -18,7 +41,10 @@ export const createListingSchema = z.object({
   unit: z.enum(["KG", "MON", "TON"]),
   minPricePerUnit: z.number().positive().optional(),
   description: z.string().min(10).max(500).optional(),
-  harvestDate: z.string().datetime("Invalid date format"),
+  harvestDate: z
+    .string()
+    .datetime("Invalid date format")
+    .refine(isNotFutureDate, "Harvest date cannot be in the future"),
   location: z.string().min(2, "Location required"),
   deliveryOptions: z
     .array(z.enum(["PICKUP", "COURIER"]))
