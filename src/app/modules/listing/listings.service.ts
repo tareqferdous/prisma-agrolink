@@ -28,6 +28,7 @@ const listingSelectFields = {
     select: {
       id: true,
       name: true,
+      image: true,
       location: true,
       phone: true,
     },
@@ -209,7 +210,7 @@ const getListingById = async (id: string) => {
 
 const createListing = async (farmerId: string, data: TCreateListing) => {
   const cleanData = Object.fromEntries(
-    Object.entries(data).filter(([_, v]) => v !== undefined)
+    Object.entries(data).filter(([_, v]) => v !== undefined),
   ) as any;
 
   const listing = await prisma.listing.create({
@@ -267,7 +268,7 @@ const updateListing = async (
   }
 
   const cleanData = Object.fromEntries(
-    Object.entries(data).filter(([_, v]) => v !== undefined)
+    Object.entries(data).filter(([_, v]) => v !== undefined),
   ) as any;
 
   const updated = await prisma.listing.update({
