@@ -6,12 +6,12 @@
 
 ## 🔗 Live Links
 
-| | URL |
-|---|---|
-| **Backend Live** | `https://your-backend.vercel.app` |
-| **Frontend Live** | `https://your-frontend.vercel.app` |
-| **Admin Email** | `admin@agrolink.com` |
-| **Admin Password** | `admin123456` |
+|                    | URL                                         |
+| ------------------ | ------------------------------------------- |
+| **Backend Live**   | `https://agrolink-backend-neon.vercel.app`  |
+| **Frontend Live**  | `https://agrolink-frontend-silk.vercel.app` |
+| **Admin Email**    | `tareqferdous10@gmail.com`                  |
+| **Admin Password** | `admin123456`                               |
 
 ---
 
@@ -85,11 +85,13 @@ Request
 ## 📡 API Endpoints
 
 ### Auth
+
 ```
 GET     /api/auth/me                        Get current session user
 ```
 
 ### Users
+
 ```
 GET     /api/users/profile                  Get own profile
 PATCH   /api/users/profile                  Update own profile
@@ -98,6 +100,7 @@ GET     /api/users/:id/reviews              Get user reviews
 ```
 
 ### Listings
+
 ```
 GET     /api/listings                       Get all listings (+ filterMeta)
 GET     /api/listings/my                    Get farmer's own listings
@@ -108,6 +111,7 @@ DELETE  /api/listings/:id                   Delete listing [FARMER]
 ```
 
 ### Bids
+
 ```
 POST    /api/listings/:id/bids              Place bid [BUYER + verified]
 GET     /api/listings/:id/bids              Get bids for listing [FARMER]
@@ -116,6 +120,7 @@ PATCH   /api/bids/:id/accept                Accept bid [FARMER]
 ```
 
 ### Orders
+
 ```
 GET     /api/orders/my                      Get own orders
 GET     /api/orders/:id                     Get order by ID
@@ -127,16 +132,19 @@ PATCH   /api/orders/:id/confirm-received    Confirm received [BUYER]
 ```
 
 ### Wallet
+
 ```
 GET     /api/wallet                         Get wallet balance + transactions
 ```
 
 ### Reviews
+
 ```
 POST    /api/orders/:id/review              Submit review after completion
 ```
 
 ### Admin
+
 ```
 GET     /api/admin/users                    Get all users
 GET     /api/admin/users/:id                Get user by ID
@@ -195,6 +203,7 @@ Review
 ```
 
 **Enums:**
+
 ```
 Role:        FARMER | BUYER | ADMIN
 Category:    VEGETABLES | FRUITS | GRAINS | RICE | PULSES | SPICES | DAIRY | OTHERS
@@ -209,15 +218,15 @@ OrderStatus: PENDING_PAYMENT | PAID | READY_FOR_PICKUP | SHIPPED | COMPLETED | C
 
 ## 🛠️ Tech Stack
 
-| Tech | Use |
-|---|---|
-| Express.js + TypeScript | REST API framework |
-| Prisma ORM | Database queries and migrations |
-| PostgreSQL (Neon DB) | Serverless database |
-| Better Auth | Session-based authentication |
-| Stripe | Payment processing (PaymentIntent) |
-| Nodemailer + Gmail SMTP | Transactional emails |
-| Zod | Request validation |
+| Tech                    | Use                                |
+| ----------------------- | ---------------------------------- |
+| Express.js + TypeScript | REST API framework                 |
+| Prisma ORM              | Database queries and migrations    |
+| PostgreSQL (Neon DB)    | Serverless database                |
+| Better Auth             | Session-based authentication       |
+| Stripe                  | Payment processing (PaymentIntent) |
+| Nodemailer + Gmail SMTP | Transactional emails               |
+| Zod                     | Request validation                 |
 
 ---
 
@@ -321,15 +330,15 @@ npm run db:seed      # Seed admin@agrolink.com / admin123456
 
 ## 📧 Email Notifications
 
-| Event | Recipient |
-|---|---|
-| New bid received | Farmer |
-| Bid accepted | Buyer |
-| Bid rejected | Buyer |
-| Listing approved | Farmer |
-| Listing rejected | Farmer |
-| Order shipped | Buyer |
-| Order completed | Both |
+| Event            | Recipient |
+| ---------------- | --------- |
+| New bid received | Farmer    |
+| Bid accepted     | Buyer     |
+| Bid rejected     | Buyer     |
+| Listing approved | Farmer    |
+| Listing rejected | Farmer    |
+| Order shipped    | Buyer     |
+| Order completed  | Both      |
 
 ---
 
@@ -350,6 +359,7 @@ DATABASE_URL="your_neon_url" npx prisma migrate deploy
 ```
 
 **`vercel.json`:**
+
 ```json
 {
   "version": 2,
@@ -362,9 +372,9 @@ DATABASE_URL="your_neon_url" npx prisma migrate deploy
 
 ## 🧪 Test Accounts
 
-| Role | Email | Password |
-|---|---|---|
-| Admin | admin@agrolink.com | admin123456 |
+| Role  | Email                    | Password    |
+| ----- | ------------------------ | ----------- |
+| Admin | tareqferdous10@gmail.com | admin123456 |
 
 **Stripe Test Card:** `4242 4242 4242 4242` · Exp: `12/29` · CVC: `123`
 
@@ -372,6 +382,7 @@ DATABASE_URL="your_neon_url" npx prisma migrate deploy
 
 ## 👤 Author
 
-- **Name:** Your Name
-- **Email:** your-email@example.com
-- **GitHub:** github.com/your-username
+- **Name:** Tareq Ferdous
+- **Email:** tareqferdous10@gmail.com
+- **GitHub:** [github.com/your-username](https://github.com/tareqferdous)
+
