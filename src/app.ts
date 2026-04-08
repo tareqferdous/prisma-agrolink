@@ -53,6 +53,8 @@ app.use(cookieParser());
 
 // Better Auth routes
 app.all("/api/auth/sign-in", toNodeHandler(auth));
+app.all("/api/auth/sign-in/social", toNodeHandler(auth));
+app.all("/api/auth/sign-in/social/*splat", toNodeHandler(auth));
 app.all("/api/auth/sign-in/*splat", toNodeHandler(auth));
 app.all("/api/auth/sign-up", toNodeHandler(auth));
 app.all("/api/auth/sign-up/*splat", toNodeHandler(auth));
