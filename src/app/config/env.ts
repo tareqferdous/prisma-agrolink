@@ -24,6 +24,8 @@ interface EnvConfig {
   STRIPE: {
     STRIPE_SECRET_KEY: string;
   };
+  OPENROUTER_API_KEY: string | undefined;
+  OPENROUTER_MODEL: string | undefined;
   SUPER_ADMIN_EMAIL: string;
   SUPER_ADMIN_PASSWORD: string;
 }
@@ -78,6 +80,8 @@ const loadEnvVariables = (): EnvConfig => {
     STRIPE: {
       STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string,
     },
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
+    OPENROUTER_MODEL: process.env.OPENROUTER_MODEL,
     SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
     SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
   };
